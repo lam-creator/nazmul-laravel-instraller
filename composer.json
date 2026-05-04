@@ -1,0 +1,31 @@
+{
+  "name": "lam-creator/laravel-installer",
+  "description": "Laravel project installer with WordPress-style web setup",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Lam Creator"
+    }
+  ],
+  "keywords": [
+    "laravel",
+    "installer",
+    "package",
+    "setup"
+  ],
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^10.0|^11.0"
+  },
+  "autoload": {
+    "psr-4": {"LamCreator\\Installer\\": "src/"}
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LamCreator\\Installer\\LaravelInstallerServiceProvider"
+      ]
+    }
+  }
+}
