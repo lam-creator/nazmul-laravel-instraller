@@ -110,19 +110,21 @@ PHP;
             return;
         }
 
-        // This is a simple injection, might need adjustment
-        $middleware = <<<PHP
-->middleware(function (\$middleware) {
-        \$middleware->use(function (\$request, \$next) {
-            if (!\$request->is('install*') && (!file_exists(base_path('bootstrap/installed.php')) || !require base_path('bootstrap/installed.php'))) {
-                return redirect('/install');
-            }
-            return \$next(\$request);
-        });
+        // Inject middleware using ->withMiddleware()
+        $middlewareInjection = <<<PHP
+    ->withMiddleware(function (\$middleware) {
+        \$middleware->web(append: [
+            function (\$request, \$next) {
+                if (!\$request->is('install*') && (!file_exists(base_path('bootstrap/installed.php')) || !require base_path('bootstrap/installed.php'))) {
+                    return redirect('/install');
+                }
+                return \$next(\$request);
+            },
+        ]);
     })
 PHP;
         // Insert before ->create()
-        $content = str_replace('->create()', $middleware . "\n->create()", $content);
+        $content = str_replace('->create()', $middlewareInjection . "\n->create()", $content);
         File::put($appPath, $content);
         $this->info('Middleware injected into bootstrap/app.php');
     }
